@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <style>
+
+    .body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    }
+    
+    .sub-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .padd {
+      padding : 40px
+    }
+
+    .button {
+      border-width:1px;
+      color:#fff;
+      border-color:rgba(18, 32, 20, 1);
+      border-top-left-radius:28px;
+      border-top-right-radius:28px;
+      border-bottom-left-radius:28px;
+      border-bottom-right-radius:28px;
+      text-shadow: 1px 1px 0px #2f6627;
+      background:rgba(176, 98, 99, 1);
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3; 
+      border-top: 16px solid rgba(176, 98, 99, 1);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 30%;
+      top: 30%;
+      width: 40%;
+      height: 40%%;
+      overflow: auto;
+      background-color: rgb(1,0,0);
+      background-color: rgba(1,0,0,0.4);
+    }
+
+    .hidden {
+      display : none
+    }
+  </style>
+    <base target="_top">
+   <script>
+    function test() {
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none"
+      let userName = document.getElementById("UserName").value
+      let password = document.getElementById("Password").value
+      let user_function = document.getElementById("Function").value
+      google.script.run.addUser([userName, password, user_function])
+      setTimeout(google.script.run.withSuccessHandler(addList).getLogin(), 3000);
+
+    }
+    function changePage(page) {
+        document.open();
+        document.write(page);
+        document.close();
+    }
+
+    function load () {
+      let value = getFunction()
+      let elem = document.getElementById('logedAs')
+      elem.innerHTML = "logged as "  + value
+
+      if (value == 'admin') {
+        document.getElementById('Adduser').classList.remove("hidden");
+      }
+
+      google.script.run.withSuccessHandler(addList).getLogin()
+    }
+
+    function getFunction() {
+      return window.localStorage.log.split(',')[2]
+    }
+
+    function openModal() {
+      var modal = document.getElementById("myModal");
+      modal.style.display = "block"
+    }
+
+    function addList(login) {
+      let doc = document.getElementById('user_list')
+      while (doc.hasChildNodes()) {
+        doc.removeChild(doc.firstChild);
+      }
+      document.getElementById('spinner').classList.add('hidden')
+      login.forEach(log => {
+
+      let li = document.createElement("li")
+      li.innerHTML =  log[0] +  ' -- ' + log[1]
+      li.classList.add('list-item')
+      doc.appendChild(li)
+      })
+    }
+  
+  </script>
+  <header>
+    <p>
+      <input type="button" value="Customer" onclick="google.script.run.withSuccessHandler(changePage).newPage('Customer');">
+      <input type="button" value="Supplier" onclick="google.script.run.withSuccessHandler(changePage).newPage('Supplier');">
+      <input type="button" value="Stock" onclick="google.script.run.withSuccessHandler(changePage).newPage('Stock');">
+      <input type="button" value="Stock" onclick="google.script.run.withSuccessHandler(changePage).newPage('Stock');">
+      <input type="button" value="Logg Off" onclick="google.script.run.withSuccessHandler(changePage).newPage('Main');">
+    </p>
+  </header>
+  <body class="body" onload="load()">
+    
+    <h1>Home</h1>
+    <div id="logedAs"></div>
+    <p>
+      <a href="https://bm-project.atlassian.net/jira/software/projects/GP/boards/2">Jira</a>
+      <a href="https://github.com/paulinefaure/scrumAgile_groupProject">Github</a>
+    </p>
+    <div class='container'>
+      <div class='sub-container padd'>
+        <p class='sub-container'>
+        Pauline FAURE
+<img  height="70" width="70" src="http://drive.google.com/uc?export=view&id=1JVi9bRBkwtQ2vip24wABWxQ7c-JQvMyv">
+        </p>
+        <p class='sub-container'>
+        Eliot MARTIN
+<img  height="70" width="70" src="https://media-private.canva.com/mA2Rk/MAFFEemA2Rk/1/s.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJWF6QO3UH4PAAJ6Q%2F20221122%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221122T135614Z&X-Amz-Expires=95202&X-Amz-Signature=51e729a91c604ef54bd2146721f3ee9f36f032dfd356576b5e7903fd12b28cb6&X-Amz-SignedHeaders=host&response-expires=Wed%2C%2023%20Nov%202022%2016%3A22%3A56%20GMT">
+        </p>
+      </div>
+      <div class='sub-container padd'>
+        <p class='sub-container'>
+        Maxime ...
+<img  height="70" width="70" src="http://drive.google.com/uc?export=view&id=123671xgddElKM28uL-zk_ixa5pp7TMSu">
+        </p>
+        <p class='sub-container'>
+        Thanaël FONTAINE
+<img  height="70" width="70" src="http://drive.google.com/uc?export=view&id=1vNPWWbheb-QpapHcBbRp4FnI-ezjngD3">
+        </p>
+      </div>
+      <div class='sub-container padd '>
+        <h3> User Liste </h3>
+        <div class="loader" id='spinner'></div>
+        <div id="user_list"></div>
+        <input type="button" class="hidden button" id="Adduser", value="Add User" onclick="openModal();">
+        <div id="myModal" class="modal">
+          <label for="UserName">UserName</label><br>
+          <input type="text" id="UserName" name="UserName"><br>
+          <label for="Password">Password</label><br>
+          <input type="text" id="Password" name="Password"><br>
+          <label for="Function">Function</label><br>
+          <select name="Function" id="Function">
+            <option value="Admin">Admin</option>
+            <option value="Sales">Sales</option>
+          </select>
+          <input type="button" class="button" value="Validate" onclick="test();">
+      </div>
+    </div>
+
+    </body>
+</html>
