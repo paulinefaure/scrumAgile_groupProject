@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+   <style>
+     body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .button {
+      border-width:1px;
+      color:#fff;
+      border-color:rgba(18, 32, 20, 1);
+      border-top-left-radius:28px;
+      border-top-right-radius:28px;
+      border-bottom-left-radius:28px;
+      border-bottom-right-radius:28px;
+      text-shadow: 1px 1px 0px #2f6627;
+      background:rgba(176, 98, 99, 1);
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3; 
+      border-top: 16px solid rgba(176, 98, 99, 1);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 30%;
+      top: 30%;
+      width: 40%;
+      height: 40%%;
+      overflow: auto;
+      background-color: rgb(1,0,0);
+      background-color: rgba(1,0,0,0.4);
+    }
+    .hidden {
+      display : none
+    }
+  </style>
+  <head>
+    <base target="_top">
+  </head>
+  <script>
+    function changePage(page) {
+        document.open();
+        document.write(page);
+        document.close();
+    }
+function Validate() {
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none"
+      let no = document.getElementById("no").value
+      let name = document.getElementById("name").value
+      let address = document.getElementById("address").value
+      let phone = document.getElementById("phone").value
+      let product = document.getElementById("product").value
+      console.table('data => ', [no,name, address, phone, product])
+      google.script.run.addInfos('Supplier', [no,name, address, phone, product])
+      setTimeout(google.script.run.withSuccessHandler(addList).getInfo('Supplier'), 4000);
+    }
+
+    function openModal() {
+      var modal = document.getElementById("myModal");
+      modal.style.display = "block"
+    }
+    
+    function load () {
+      let value = window.localStorage.log.split(',')[2]
+      // let elem = document.getElementById('logedAs')
+      // elem.innerHTML = "logged as "  + value
+
+      if (value == 'Sales') {
+         document.getElementById('button').classList.remove("hidden");
+      }
+
+      google.script.run.withSuccessHandler(addList).getInfo('Supplier')
+    }
+    
+    
+    function load () {
+      let value = getFunction()
+      // let elem = document.getElementById('logedAs')
+      // elem.innerHTML = "logged as "  + value
+
+      if (value == 'admin') {
+         document.getElementById('Adduser').classList.remove("hidden");
+      }
+
+      google.script.run.withSuccessHandler(addList).getInfo('Supplier')
+    }
+    
+    function addList(infos) {
+      let doc = document.getElementById('list')
+      while (doc.hasChildNodes()) {
+        doc.removeChild(doc.firstChild);
+      }
+      document.getElementById('spinner').classList.add('hidden')
+      infos.forEach(log => {
+      let li = document.createElement("li")
+      li.innerHTML = log
+      li.classList.add('list-item')
+      doc.appendChild(li)
+      })
+    }
+  </script>
+    <header>
+    <p>
+      <input type="button" value="Home" onclick="google.script.run.withSuccessHandler(changePage).newPage('HomeScreen');">
+      <input type="button" value="Customer" onclick="google.script.run.withSuccessHandler(changePage).newPage('Customer');">
+      <input type="button" value="Stock" onclick="google.script.run.withSuccessHandler(changePage).newPage('Stock');">
+      <input type="button" value="Order" onclick="google.script.run.withSuccessHandler(changePage).newPage('Order');">
+      <input type="button" value="Logg Off" onclick="google.script.run.withSuccessHandler(changePage).newPage('Main');">
+    </p>
+  </header>
+<body onload="load()">
+    <h1>Supplier</h1>
+    <div class="loader" id='spinner'></div>
+    <div id="list"></div>
+    <input type="button" class="button" id='Adduser' value="Add Supplier" onclick="openModal();">
+    <div id="myModal" class="modal">
+      <label for="customer no.">customer no.</label><br>
+      <input type="text" id="no" name="customer no."><br>
+      <label for="name">name</label><br>
+      <input type="text" id="name" name="name"><br>
+      <label for="address">address</label><br>
+      <input type="text" id="address" name="address"><br>
+      <label for="telephone">telephone</label><br>
+      <input type="text" id="phone" name="telephone"><br>
+      <label for="product id">product id</label><br>
+      <input type="text" id="product" name="product id"><br>
+      <input type="button" class="button" value="Validate" onclick="Validate();">
+    </div>
+  </body>
+</html>
