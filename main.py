@@ -6,7 +6,7 @@ f = open('data.json')
   
 stock = json.load(f)
 nav = ['Stock', 'Shopping' ,'Packing', 'Change']
-type = ["luxury", "Essential", "Gift"]
+type = ["Luxury", "Essential", "Gift"]
 basket = []
 screen = 0
 log = 0
@@ -62,39 +62,78 @@ def ViewItem(choice) :
         x -= -1
     if choice == 3 : 
         item = int(input('ID of Item to remove\n\t->')) - 1
+        old = stock[item]
         stock.pop(item)
-        print(item["name"], "as been removed")
+        print(old["name"], "as been removed")
     input('\n[enter to go back]')
     print('\n---------------------------------------------------------------\n')
 
-   
+
 def Shopping() : 
     print('\t\tAdd Item to Estimate') 
-    print("  - {:<15} {:<15} {:<15} \n".format('Name', 'Quantity', 'Price'))
-    x = 1
-    for item in stock :
-        print(x," - {:<15} {:<15} {:<15}".format(item["name"], item["quantity"], 'price'))
-        x -= -1
+    print("  - {:<15} {:<15} {:<15} \n".format('Name', 'Quantity', 'Price €'))
     ItemToBasket()
+    choice = int(input('\n\t1 - Add new item\n\t2 - Show Estimate\n\t3 - Quit\n\t -> '))
+
     while (1):
-        choice = int(input('\n\t1 - Add new item\n\t2 - Show Estimate\n\t3 - Quit\n\t -> '))
         if choice == 2 :
             Estimate()
         elif choice == 1 : 
             ItemToBasket()
+        elif choice == 3:
+            removeItem()
+        elif choice == 4:
+            ShowBasket()
         else :
+            basket.clear()
             break
+        choice = int(input('\n\t1 - Add new item\n\t2 - Show Estimate\n\t3 - Remove Item\n\t4 - Go to Basket\n\t5 - Quit\n\t -> '))
     print('\n---------------------------------------------------------------\n')
 
 def ItemToBasket() :
+        x = 1
+        for item in stock :
+            print(x," - {:<15} {:<15} {:<15}".format(item["name"], item["quantity"], EstimateSelf(item)))
+            x -= -1
         item = int(input('\nID of item -> ')) - 1
         quantity = int(input('\nQuantity -> '))
         stock[item]["quant"] = quantity
         basket.append(stock[item])
         print(stock[item]['name'], 'add to basket\n\n')
+        print('\n---------------------------------------------------------------\n')
+
+
+def removeItem() :
+    item = int(input('ID of Item to remove\n\t->')) - 1
+    old = basket[item]
+    basket.pop(item)
+    print(old["name"], "as been removed")
+
+def EstimateSelf(item) :
+    cost = 50 if item["type"] == 0 else 30 if item["type"] == 1 else 20
+    return (cost)
+
+
+def EstimateVAT(item) :
+    cost = 60 if item["type"] == 0 else 33 if item["type"] == 1 else 21
+    return (cost * item["quant"])
 
 def Estimate() : 
-    print(basket)
+    print("  - {:<15} {:<15} {:<15} \n".format('Name', 'Quantity', 'Price € with VAT'))
+    x = 1
+    for item in basket :
+        print(x," - {:<15} {:<15} {:<15}".format(item["name"], item["quant"], EstimateVAT(item)))
+        x -= -1
+
+def ShowBasket() : 
+    cost = 0
+    vat = 0
+    for item in basket :
+        cost += EstimateSelf(item) * item['quant']
+        vat += EstimateVAT(item)
+        
+    print('\n---------------------------------------------------------------\n')    
+    print('Bill : \n\tcost :\t\t', cost, '\n\t+VAT :\t\t', vat-cost, '\n\ttotal : \t', vat)
 def Packing() : 
     print('\t\tPacking')
 def Change() : 
