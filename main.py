@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import json
-from time import sleep
-  
+import sys
 f = open('data.json')
   
 stock = json.load(f)
@@ -10,6 +9,7 @@ type = ["Luxury", "Essential", "Gift"]
 basket = []
 screen = 0
 log = 0
+
 def login() :
     print('\n---------------------------------------------------------------\n')
     print('Log as : \n\t1-User\n\t2-Admin')
@@ -139,41 +139,34 @@ def Packing() :
 def Change() : 
     print('\t\tChange')
 
-login()
-#
-#
-# if screen == 1 :
-#        item = {
-#            "name" : input('Item Name\n\t-> '),
-#            "type" : int(input('Item Type : \n\t1-Luxury\n\t2-Essential\n\t3-Gift\n\t -> ')) - 1,
-#            "exp" : input(' expiration date \n\t-> '),
-#            "quantity" : int(input('quantity\n\t-> '))
-#        }
-#        stock.append(item)
-#        print(item["name"] + " added to Stock")
-#    if screen == 2 : 
-#        print('  \tName\tType\tExp Date\tQuantity')
-#        for item in stock : 
-#            print('--\t',item["name"], '\t', type[item["type"]],'\t', item["exp"],'\t', item["quantity"] )
-#    if screen == 3 :
-#        while (1) :  
-#            x = 1
-#            for item in stock : 
-#                print('--',x,'\t',item["name"])
-#                x -= -1
-#            choice = int(input('\n1-Add Item to Estimation\n2-Show Estimation\n -> '))
-#            if choice == 1 : 
-#                item = int(input('Item Number-> ')) - 1
-#                basket.append(stock[item])
-#                print(item['name'], 'add to basket')
-#                print(stock[item['name']], 'add to basket')
-#            elif choice == 2 : 
-#                x = 1
-#                for item in basket : 
-#                    print('--',x,'\t',item["name"])
-#                    x -= -1
-#    if screen == 4 : 
-#        print('4')
+def test() : 
+    print('test item type 0', end=' : ')
+    item = {'name': 'Chocolat', 'type': 0, 'exp': '23/12', 'quantity': '100'}
+    esti = EstimateSelf(item)
+    if (esti == 50) :
+        print ('Y')
+    else :
+        print ('N')
+
+    print('test item type 1', end=' : ')
+    item = {'name': 'Chocolat', 'type': 1, 'exp': '23/12', 'quantity': '100'}
+    esti = EstimateSelf(item)
+    if (esti == 30) :
+        print ('Y')
+    else :
+        print ('N')
+    print('test item type 2', end=' : ')
+    item = {'name': 'Chocolat', 'type': 2, 'exp': '23/12', 'quantity': '100'}
+    esti = EstimateSelf(item)
+    if (esti == 20) :
+        print ('Y')
+    else :
+        print ('N')
+    exit()
+
+if (len(sys.argv) == 2) :
+    test()
+else :
+    login()
 
 
-   
